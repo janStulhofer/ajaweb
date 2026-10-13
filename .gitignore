@@ -1,0 +1,13 @@
+# Design reference screenshots (not part of the site)
+.figma-ref/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
