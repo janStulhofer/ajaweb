@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HTML a CSS — příručka s příklady</title>
+<style>
+  /* ---- Tato stránka je sama o sobě ukázkou dobře napsaného CSS ---- */
+  :root {
+    --bg: #ffffff;
+    --ink: #1c2b18;
+    --muted: #5b6b56;
+    --line: #d9e2d6;
+    --code-bg: #f4f7f5;
+    --accent: #2e4f21;
+    --accent-soft: #d2f8dc;
+    --highlight: #a0f1bd;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg);
+  }
+
+  /* Dvoudrátkový layout: menu vlevo, obsah vpravo */
+  .layout { display: flex; align-items: flex-start; }
+
+  .toc {
+    position: sticky;      /* zůstává na místě při scrollování */
+    top: 0;
+    flex: 0 0 240px;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 24px 16px;
+    border-right: 1px solid var(--line);
+    background: var(--code-bg);
+    font-size: 14px;
+  }
+  .toc h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 20px 0 8px; }
+  .toc a { display: block; padding: 4px 0; color: var(--ink); text-decoration: none; }
+  .toc a:hover { color: var(--accent); text-decoration: underline; }
+
+  main { flex: 1 1 auto; max-width: 820px; padding: 40px 32px 120px; }
+
+  h1 { font-size: 30px; margin-bottom: 8px; }
+  .sub { color: var(--muted); margin-bottom: 40px; }
+  h2 { font-size: 24px; margin: 48px 0 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+  h3 { font-size: 18px; margin: 28px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul { margin: 0 0 16px 22px; }
+  li { margin-bottom: 4px; }
+
+  /* Blok s kódem */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 8px 0 16px;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  p code, li code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+
+  /* Živá ukázka – ohraničený rámeček, ve kterém běží příklad */
+  .demo {
+    border: 1px dashed var(--accent);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px 0 20px;
+    background: #fbfdfb;
+  }
+  .demo-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+
+  .note {
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .note strong { color: var(--accent); }
+
+  /* Ukázkové prvky uvnitř dem */
+  .demo-btn {
+    display: inline-block;
+    padding: 12px;
+    border-radius: 51px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color .3s ease;
+  }
+  .demo-btn:hover { background: var(--highlight); color: var(--accent); }
+
+  .flex-demo { display: flex; gap: 10px; }
+  .flex-demo > div { background: var(--accent-soft); padding: 12px; border-radius: 8px; flex: 1 1 0; text-align: center; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ---- Obsahová navigace ---- -->
+  <nav class="toc">
+    <h2>HTML</h2>
+    <a href="#h-struktura">Struktura stránky</a>
+    <a href="#h-tagy">Základní tagy</a>
+    <a href="#h-sekce">Sekce a sémantika</a>
+    <a href="#h-atributy">Atributy</a>
+    <a href="#h-formulare">Tlačítka a odkazy</a>
+    <a href="#h-obrazky">Obrázky</a>
+
+    <h2>CSS</h2>
+    <a href="#c-selektor">Selektor a pravidlo</a>
+    <a href="#c-box">Box model</a>
+    <a href="#c-fle">Flexbox</a>
+    <a href="#c-gap">gap, padding, margin</a>
+    <a href="#c-text">Text a barvy</a>
+    <a href="#c-variables">CSS proměnné</a>
+    <a href="#c-media">Media queries</a>
+    <a href="#c-pseudo">Pseudotřídy</a>
+    <a href="#c-carousel">Carousel bez JS</a>
+  </nav>
+
+  <main>
+    <h1>HTML a CSS — příručka s příklady</h1>
+    <p class="sub">Vše na této stránce je živá ukázka. Každý blok ukazuje kód a hned pod ním, co dělá.</p>
+
+    <!-- ========================================================
+         ČÁST 1 — HTML
+         ======================================================== -->
+    <h2 id="h-struktura">1. Struktura stránky</h2>
+    <p>Každá HTML stránka má pevnou kostru. Nejdůležitější je <code>&lt;head&gt;</code> (nastavení, nevidíš ho) a <code>&lt;body&gt;</code> (co se zobrazí).</p>
+    <pre><code>&lt;!DOCTYPE html&gt;          &lt;!-- říká prohlížeči: tohle je HTML5 --&gt;
+&lt;html lang="en"&gt;          &lt;!-- jazyk stránky --&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;                            &lt;!-- diakritika --&gt;
+    &lt;meta name="viewport" content="width=device-width" /&gt; &lt;!-- mobil --&gt;
+    &lt;title&gt;Název v záložce&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css" /&gt;          &lt;!-- připojení CSS --&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    ... obsah, který vidíš ...
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    <div class="note"><strong>Zapamatuj:</strong> <code>&lt;link rel="stylesheet"&gt;</code> připojí externí CSS soubor. Bez něj by stránka byla bez stylů.</div>
+
+    <h2 id="h-tagy">2. Základní textové tagy</h2>
+    <pre><code>&lt;h1&gt;Nadpis největší&lt;/h1&gt;   &lt;!-- h1 až h6: nadpisy podle důležitosti --&gt;
+&lt;p&gt;Odstavec textu.&lt;/p&gt;        &lt;!-- p = paragraph, běžný text --&gt;
+&lt;strong&gt;Důležité&lt;/strong&gt;   &lt;!-- tučně (má význam) --&gt;
+&lt;em&gt;zdůrazněné&lt;/em&gt;          &lt;!-- kurzíva (má význam) --&gt;</code></pre>
+    <div class="demo">
+      <div class="demo-label">Výsledek:</div>
+      <h3 style="margin:0">Nadpis (h3)</h3>
+      <p style="margin:4px 0 0">Odstavec s <strong>tučným</strong> a <em>kurzívovým</em> slovem.</p>
+    </div>
+    <div class="note"><strong>Proč h1, h2, h3?</strong> Nadpisy mají být v pořadí (jeden h1, pak h2…). Pomáhá to čtečkám obrazovky a Google vyhledávání. Nedělej z běžného textu nadpis jen kvůli velikosti — velikost řeší CSS.</div>
+
+    <h2 id="h-sekce">3. Sémantické značky (významové bloky)</h2>
+    <p>Místo samých <code>&lt;div&gt;</code> používej značky, které popisují, co blok je:</p>
+    <pre><code>&lt;header&gt;  horní lišta / hlavička
+&lt;nav&gt;     menu s odkazy
+&lt;main&gt;    hlavní obsah stránky (jen jednou)
+&lt;section&gt; samostatná sekce (např. "Služby")
+&lt;article&gt; samostatný článek / karta
+&lt;footer&gt;  patička dole
+&lt;blockquote&gt; citát</code></pre>
+    <div class="note"><strong>Přínos:</strong> Kód je čitelnější a stroje (Google, čtečky) stránce lépe rozumí. Vizuálně se nic nemění — to dělá CSS.</div>
+
+    <h2 id="h-atributy">4. Atributy — doplňky tagů</h2>
+    <p>Atribut je <code>název="hodnota"</code> uvnitř otevíracího tagu. Nejpoužívanější:</p>
+    <pre><code>&lt;a href="https://google.com"&gt;Odkaz&lt;/a&gt;
+   ↑ href = kam odkaz vede
+
+&lt;img src="foto.png" alt="Popis obrázku" /&gt;
+   ↑ src = cesta k souboru     ↑ alt = text, když se obrázek nenačte
+
+&lt;div class="karta" id="hlavni"&gt;
+   ↑ class = skupina (může být vícekrát)  ↑ id = jedinečné jméno (jen jednou)</code></pre>
+    <div class="note"><strong>class vs id:</strong> <code>class</code> používej pro stylování (může se opakovat), <code>id</code> pro odkazování jedinečného prvku nebo kotvy (<code>#book</code>).</div>
+
+    <h2 id="h-formulare">5. Odkazy a tlačítka</h2>
+    <pre><code>&lt;a href="#sluzby"&gt;Skoč na sekci&lt;/a&gt;     &lt;!-- # = odkaz uvnitř stránky --&gt;
+&lt;a href="kontakt.html"&gt;Jiná stránka&lt;/a&gt;
+
+&lt;button type="button"&gt;Klikni&lt;/button&gt;  &lt;!-- tlačítko (akce) --&gt;</code></pre>
+    <div class="demo">
+      <div class="demo-label">Výsledek:</div>
+      <a class="demo-btn" href="#c-carousel">Přejít na carousel</a>
+    </div>
+    <div class="note"><strong>a vs button:</strong> <code>&lt;a&gt;</code> = někam vede (odkaz). <code>&lt;button&gt;</code> = něco spustí. V carouselu používáme <code>&lt;label&gt;</code>, což je třetí varianta — viz část o carouselu.</div>
+
+    <h2 id="h-obrazky">6. Obrázky</h2>
+    <pre><code>&lt;img src="assets/foto.png"
+     alt="Pracovník radí klientovi"
+     width="429" height="411" /&gt;</code></pre>
+    <ul>
+      <li><code>src</code> — cesta (relativní <code>assets/foto.png</code> funguje i po přesunu).</li>
+      <li><code>alt</code> — popis pro nevidomé a když se obrázek nenačte. Prázdný <code>alt=""</code> = dekorativní obrázek.</li>
+      <li><code>width</code>/<code>height</code> — pomáhají prohlížeči rezervovat místo (stránka „neposkakuje“).</li>
+    </ul>
+
+    <!-- ========================================================
+         ČÁST 2 — CSS
+         ======================================================== -->
+    <h2 id="c-selektor">7. Selektor a pravidlo</h2>
+    <p>CSS pravidlo má tvar <code>selektor { vlastnost: hodnota; }</code>. Selektor vybírá, na co se to použije.</p>
+    <pre><code>.karta      { color: red; }   /* .třída  = všechny prvky s class="karta" */
+#hlavni     { color: blue; }  /* #id     = prvek s id="hlavni" */
+p           { color: green; } /* tag     = všechny &lt;p&gt; */
+.card__title{ font-size: 40px; } /* jméno s __ = část komponenty (BEM) */</code></pre>
+    <div class="note"><strong>BEM (naše konvence):</strong> <code>blok__část</code> a <code>blok--varianta</code>. Např. <code>.card__title</code> = nadpis uvnitř karty, <code>.btn--dark</code> = tmavá varianta tlačítka. Drží to názvy přehledné.</div>
+
+    <h2 id="c-box">8. Box model</h2>
+    <p>Každý prvek je obdélník složený z vrstev: obsah → padding (vnitřní odsazení) → border (rámeček) → margin (vnější odsazení).</p>
+    <pre><code>.box {
+  padding: 20px;           /* místo UVNITŘ, mezi obsahem a okrajem */
+  border: 1px solid #ccc;  /* rámeček */
+  margin: 10px;            /* místo VENKU, mezi prvky */
+  border-radius: 20px;     /* zakulacení rohů */
+}</code></pre>
+    <div class="demo">
+      <div class="demo-label">padding vs margin (vnější = světle, vnitřní = zeleně):</div>
+      <div style="background:var(--accent-soft); padding:16px; border-radius:8px;">
+        <div style="background:#fff; border:1px dashed var(--accent); padding:20px; border-radius:6px;">Obsah s paddingem 20px</div>
+      </div>
+    </div>
+    <div class="note"><strong>box-sizing: border-box</strong> (nastaveno v resetu) znamená, že <code>width: 300px</code> platí i s paddingem a borderem — bez toho by se šířka počítala divně.</div>
+
+    <h3>padding-block a padding-inline</h3>
+    <pre><code>.box {
+  padding-block: 100px;   /* nahoře a dole (svisle) */
+  padding-inline: 40px;   /* vlevo a vpravo (vodorovně) */
+}
+/* Je to to samé jako zkráceně: */
+.box { padding: 100px 40px; }  /* první číslo = svisle, druhé = vodorovně */</code></pre>
+
+    <h2 id="c-fle">9. Flexbox — rozvržení do řady/sloupce</h2>
+    <p><code>display: flex</code> z prvku udělá „kontejner“, jehož děti se seřadí vedle sebe (nebo pod sebe).</p>
+    <pre><code>.rada {
+  display: flex;
+  flex-direction: row;      /* row = vedle sebe (výchozí) */
+                            /* column = pod sebe */
+  gap: 20px;                /* mezera mezi dětmi */
+  align-items: center;      /* svislé zarovnání dětí */
+  justify-content: center;  /* vodorovné zarovnání dětí */
+}</code></pre>
+    <div class="demo">
+      <div class="demo-label">display: flex + gap: 10px</div>
+      <div class="flex-demo">
+        <div>1</div><div>2</div><div>3</div>
+      </div>
+    </div>
+    <div class="note"><strong>Nejdůležitější trik:</strong> <code>flex: 1 1 0</code> na dítěti = „roztáhni se a zaber stejně místa jako sourozenci“. Používáme to u hero (text se roztáhne, obrázek zůstane vpravo) a u service karet.</div>
+
+    <h3>Zarovnání</h3>
+    <pre><code>/* svislá osa (když je flex-direction: row) */
+align-items: flex-start | center | stretch;
+
+/* vodorovná osa */
+justify-content: flex-start | center | space-between;</code></pre>
+    <div class="note"><strong>space-between:</strong> první dítě vlevo, poslední vpravo, mezera mezi nimi. Tím jsme dali „Services“ vlevo a tlačítko vpravo ve footeru.</div>
+
+    <h2 id="c-gap">10. gap vs padding vs margin</h2>
+    <ul>
+      <li><code>gap: 20px</code> — mezera <strong>mezi dětmi</strong> flex kontejneru.</li>
+      <li><code>padding</code> — mezera <strong>uvnitř</strong> prvku (mezi okrajem a obsahem).</li>
+      <li><code>margin</code> — mezera <strong>vně</strong> prvku (odsazení od sousedů).</li>
+    </ul>
+    <div class="note"><strong>Tip:</strong> Pro rozestupy mezi položkami preferuj <code>gap</code> — nepotřebuješ řešit „poslední prvek ať nemá margin“.</div>
+
+    <h2 id="c-text">11. Text, barvy a pozadí</h2>
+    <pre><code>.titulek {
+  font-family: "Work Sans", sans-serif; /* písmo (s náhradou) */
+  font-size: 80px;        /* velikost */
+  font-weight: 400;       /* tloušťka: 400 = regular, 500 = medium, 700 = bold */
+  line-height: 1;         /* výška řádku (1 = 100 % velikosti) */
+  letter-spacing: -0.08em;/* mezera mezi písmeny (záporná = u sebe) */
+  color: #2e4f21;         /* barva textu */
+  text-align: center;     /* zarovnání: left | center | right */
+  background: #a0f1bd;    /* barva pozadí */
+}</code></pre>
+    <p>Barvy se zapisují jako hex (<code>#2e4f21</code>), <code>rgb(46, 79, 33)</code> nebo <code>rgba(0,0,0,0.5)</code> (poslední číslo = průhlednost 0–1).</p>
+
+    <h3>Zaoblení a stíny</h3>
+    <pre><code>border-radius: 20px;          /* zakulacení rohů */
+border-radius: 51px;          /* silné = „pilulka“ (tlačítka) */
+border-radius: 20px 20px 0 0; /* pořadí: levý-horní, pravý-horní, pravý-dolní, levý-dolní */
+box-shadow: 0 4px 12px rgba(0,0,0,.15); /* stín: posun-x posun-y rozostření barva */</code></pre>
+
+    <h2 id="c-variables">12. CSS proměnné (vlastní hodnoty)</h2>
+    <p>Proměnná se definuje v <code>:root</code> (platí pro celou stránku) a používá se přes <code>var(--název)</code>.</p>
+    <pre><code>:root {
+  --barva-hlavni: #2e4f21;   /* definice */
+  --velikost-nadpisu: 80px;
+}
+
+h1 {
+  color: var(--barva-hlavni);        /* použití */
+  font-size: var(--velikost-nadpisu);
+}</code></pre>
+    <div class="note"><strong>Proč:</strong> Když chceš změnit barvu, změníš ji na jednom místě. V našem <code>styles.css</code> jsou takto uložené všechny barvy, fonty, velikosti a poloměry.</div>
+
+    <h2 id="c-media">13. Media queries — responzivita</h2>
+    <p>Media query = „pravidla platí jen na určité šířce okna“. Používáme dvě:</p>
+    <pre><code>/* Tablet a menší (do 1279px) */
+@media (max-width: 1279px) {
+  .hero__title { font-size: 58px; }
+}
+
+/* Mobil (do 799px) */
+@media (max-width: 799px) {
+  .hero__title { font-size: 40px; }
+  .hero__content { flex-direction: column; } /* text a obrázek pod sebe */
+}</code></pre>
+    <div class="note"><strong>Jak to funguje:</strong> Základní styly (bez media query) platí pro desktop. Media query je „přebijí“, když je okno užší. Zmenši okno prohlížeče (nebo F12 → ikona telefonu) a uvidíš změny.</div>
+
+    <h2 id="c-pseudo">14. Pseudotřídy a pseudoprvky</h2>
+    <p>Pseudotřída <code>:</code> = stav prvku. Pseudoprvek <code>::</code> = část prvku, kterou „dokreslíš“.</p>
+    <pre><code>.btn:hover { background: green; }    /* :hover = když na něj najede myš */
+a:focus-visible { outline: 2px solid; } /* :focus = klávesnicí vybrané (dostupnost) */
+
+.karta::before {        /* ::before = vloží obsah PŘED prvek */
+  content: "";          /* povinné, klidně prázdné */
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;          /* vodorovná čárka nad kartou */
+  background: #2e4f21;
+}</code></pre>
+    <div class="demo">
+      <div class="demo-label">Ukázka :hover — najeď myší</div>
+      <button class="demo-btn" type="button">Najeď na mě</button>
+    </div>
+    <div class="note"><strong>Použití v projektu:</strong> Čárky nad kartami v testimonial sekci jsou <code>::before</code>. Tlačítka mění barvu přes <code>:hover</code>.</div>
+
+    <h2 id="c-carousel">15. Carousel bez JavaScriptu (radio + :checked)</h2>
+    <p>Tohle je nejzajímavější trik v projektu. Místo JS použijeme skryté radio buttony a stav <code>:checked</code>.</p>
+    <p><strong>HTML část:</strong></p>
+    <pre><code>&lt;input type="radio" name="testimonial" id="t1" checked /&gt;
+&lt;input type="radio" name="testimonial" id="t2" /&gt;
+
+&lt;label for="t1"&gt;Karta 1&lt;/label&gt;   &lt;!-- klik = zaškrtne radio t1 --&gt;
+&lt;label for="t2"&gt;Karta 2&lt;/label&gt;
+
+&lt;p data-quote="1"&gt;Citát 1&lt;/p&gt;
+&lt;p data-quote="2"&gt;Citát 2&lt;/p&gt;</code></pre>
+    <p><strong>CSS část:</strong></p>
+    <pre><code>/* 1) Radio schováme */
+.testimonial__radio { position: absolute; opacity: 0; }
+
+/* 2) Všechny citáty skryjeme */
+.testimonial__quote { display: none; }
+
+/* 3) Citát, který patří zaškrtnutému radiu, zobrazíme.
+      "~" = obecný sourozenec (najde .testimonial__quote níž v DOM) */
+#t1:checked ~ .seznam .testimonial__quote[data-quote="1"],
+#t2:checked ~ .seznam .testimonial__quote[data-quote="2"] {
+  display: flex;
+}</code></pre>
+    <div class="note"><strong>Jak to čteš:</strong> „Když je <code>#t1</code> zaškrtnuté, najdi sourozence <code>.seznam</code> a v něm citát číslo 1 a zobraz ho.“ Kliknutí na <code>&lt;label&gt;</code> zaškrtne radio, čímž se přepne, co je vidět — bez jediného řádku JavaScriptu.</div>
+
+    <h3>Živá ukázka</h3>
+    <div class="demo">
+      <style>
+        .mini input { position: absolute; opacity: 0; }
+        .mini .mini__quote { display: none; margin-top: 10px; }
+        #m1:checked ~ .mini__list .mini__quote[data-m="1"],
+        #m2:checked ~ .mini__list .mini__quote[data-m="2"],
+        #m3:checked ~ .mini__list .mini__quote[data-m="3"] { display: block; }
+        .mini label { display: inline-block; padding: 8px 16px; border: 1px solid var(--accent); border-radius: 8px; cursor: pointer; margin-right: 6px; }
+        #m1:checked ~ .mini__list label[for="m1"],
+        #m2:checked ~ .mini__list label[for="m2"],
+        #m3:checked ~ .mini__list label[for="m3"] { background: var(--accent); color: #fff; }
+      </style>
+      <div class="mini">
+        <input type="radio" name="m" id="m1" checked />
+        <input type="radio" name="m" id="m2" />
+        <input type="radio" name="m" id="m3" />
+        <div class="mini__list">
+          <label for="m1">Karta 1</label>
+          <label for="m2">Karta 2</label>
+          <label for="m3">Karta 3</label>
+          <p class="mini__quote" data-m="1">Toto je citát pro kartu 1.</p>
+          <p class="mini__quote" data-m="2">Toto je citát pro kartu 2.</p>
+          <p class="mini__quote" data-m="3">Toto je citát pro kartu 3.</p>
+        </div>
+      </div>
+    </div>
+    <p>Klikni na „Karta 1/2/3“ — přepne se text i zvýraznění. Přesně tak funguje testimonial sekce na webu.</p>
+
+    <h2>Shrnutí</h2>
+    <ul>
+      <li><strong>HTML</strong> = obsah a význam (nadpisy, odstavce, sekce, obrázky).</li>
+      <li><strong>CSS</strong> = vzhled a rozvržení (barvy, mezery, řada/sloupec, responzivita).</li>
+      <li><strong>class</strong> pro stylování, <strong>id</strong> pro jedinečné prvky a kotvy.</li>
+      <li><strong>flex</strong> rozvrhuje do řady/sloupce, <code>gap</code> dělá mezery.</li>
+      <li><strong>@media</strong> řeší tablet a mobil.</li>
+      <li><strong>Proměnné</strong> (<code>--název</code>) drží hodnoty na jednom místě.</li>
+      <li><strong>Carousel</strong> jde i bez JS: radio + <code>:checked</code> + <code>~</code>.</li>
+    </ul>
+  </main>
+</div>
+</body>
+</html>

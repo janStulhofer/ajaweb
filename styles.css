@@ -1,33 +1,46 @@
 /* ============================================================
    Noble Finance — Home
-   Design tokens taken directly from the Figma variables/styles.
+   ------------------------------------------------------------
+   Layout: one column of full-width sections (`.page` is a flex
+   column). Each section fills the viewport width; its content sits
+   inside a comfortable side padding. At three widths the layout
+   adapts:
+       Desktop  : 1280px and up
+       Tablet   : 800px – 1279px   (media query max-width: 1279px)
+       Mobile   : below 800px      (media query max-width: 799px)
+
+   Everything is driven by CSS custom properties (variables) defined
+   in :root below, so colours, fonts, sizes and spacing are changed
+   in one place.
    ============================================================ */
 
+/* :root holds design tokens. They are reusable values referenced
+   elsewhere with var(--name), e.g. color: var(--bg-3). */
 :root {
-  /* --- Colors (Figma global variables) --- */
-  --bg-1: #a0f1bd;      /* Background/Background 1 */
-  --bg-2: #f9f9f9;      /* Background/Background 2 */
-  --bg-3: #2e4f21;      /* Background/Background 3 */
-  --bg-4: #ffffff;      /* Background/Background 4 */
-  --bg-5: #f4f7f5;      /* Background/Background 5 */
-  --bg-6: #d2f8dc;      /* Background/Background 6 */
-  --accent-1: #d2f8dc;  /* Accent/accent 1 */
-  --accent-2: #d7d7d7;  /* Accent/accent 2 */
-  --text-paragraph: #2e4f21; /* Text/Paragraph */
+  /* --- Colours (taken from the Figma variables) --- */
+  --bg-1: #a0f1bd;      /* light green — nav / hero background */
+  --bg-2: #f9f9f9;      /* off-white — services / testimonial background */
+  --bg-3: #2e4f21;      /* dark green — footer, buttons, active card */
+  --bg-4: #ffffff;      /* white — page and card background */
+  --bg-5: #f4f7f5;
+  --bg-6: #d2f8dc;
+  --accent-1: #d2f8dc;  /* pale green — service cards */
+  --accent-2: #d7d7d7;
+  --text-paragraph: #2e4f21;
   --text-on-accent-1: #ffffff;
   --text-on-accent-2: #506349;
   --text-on-accent-3: #7d9276;
   --text-on-accent-4: #d5e4d0;
-  --divider-1: #2e4f21; /* Divider/Divider 1 */
-  --divider-2: #c7c7c7; /* Divider/Divider 2 */
+  --divider-1: #2e4f21;
+  --divider-2: #c7c7c7;
 
-  /* --- Typography --- */
+  /* --- Font families --- */
   --font-heading: "Work Sans", sans-serif;
   --font-body: "Work Sans", sans-serif;
   --font-label: "Work Sans", sans-serif;
-  --font-btn: "DM Sans", sans-serif;
+  --font-btn: "DM Sans", sans-serif; /* large button only */
 
-  /* Text styles — confirmed from Figma */
+  /* --- Font sizes (from the Figma text styles) --- */
   /* Display: Work Sans Regular 192.93 / 105% / -4.5% */
   --fs-display: 192.93px;
   /* Heading 1: Work Sans Regular 80 / 100% / -8% */
@@ -49,24 +62,32 @@
   /* Label 2 (buttons): DM Sans Medium 15 / 100% / -2% */
   --fs-btn: 15px;
 
-  /* Responsive overrides (tablet / mobile styles from Figma) */
-  --fs-h1-alt: 40px;   /* Heading 1 @ tablet/mobile */
-  --fs-h3-alt: 28px;   /* Heading 3 @ tablet/mobile */
-  --fs-h4-alt: 22px;   /* Heading 4 @ tablet/mobile */
-  --fs-quote-alt: 18px;/* Quote @ tablet/mobile */
+  /* Smaller versions used inside the tablet & mobile media queries */
+  --fs-h1-sm: 58px;   /* Heading 1 @ tablet */
+  --fs-h2-sm: 48px;   /* Heading 2 @ tablet */
+  --fs-h3-sm: 34px;   /* Heading 3 @ tablet */
+  --fs-h4-sm: 26px;   /* Heading 4 @ tablet */
+  --fs-quote-sm: 24px;/* Quote @ tablet */
 
+  --fs-h1-xs: 40px;   /* Heading 1 @ mobile */
+  --fs-h2-xs: 32px;   /* Heading 2 @ mobile */
+  --fs-h3-xs: 28px;   /* Heading 3 @ mobile */
+  --fs-h4-xs: 22px;   /* Heading 4 @ mobile */
+  --fs-quote-xs: 18px;/* Quote @ mobile */
+
+  /* --- Line heights (unitless multipliers of the font size) --- */
   --lh-h1: 1em;      /* 100% */
   --lh-105: 1.05em;  /* 105% */
   --lh-110: 1.1em;   /* 110% */
 
-  /* Letter-spacing per style */
-  --ls-h1: -0.08em;   /* -8%  — Heading 1 */
-  --ls-h2: -0.07em;   /* -7%  — Heading 2 */
-  --ls-h3: -0.045em;  /* -4.5% — Heading 3,4,5, Display, Quote, Paragraph, Label 1 */
-  --ls-label2: -0.02em; /* -2% — Label 2 / buttons */
-  --ls-body: -0.045em;  /* Paragraph / Label 1 */
+  /* --- Letter spacing (negative = tighter) --- */
+  --ls-h1: -0.08em;     /* -8%  — Heading 1 */
+  --ls-h2: -0.07em;     /* -7%  — Heading 2 */
+  --ls-h3: -0.045em;    /* -4.5% — most headings, body, labels */
+  --ls-label2: -0.02em; /* -2%  — large button */
+  --ls-body: -0.045em;  /* body copy / labels */
 
-  /* --- Radii --- */
+  /* --- Border radii --- */
   --radius-card: 20px;
   --radius-pill: 51.5745px;
   --radius-pill-lg: 88px;
@@ -80,18 +101,19 @@
 }
 
 /* ============================================================
-   Reset
+   Reset — remove default browser spacing and normalise a few
+   elements so the layout maths is predictable.
    ============================================================ */
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+  box-sizing: border-box; /* padding/border count inside width */
   margin: 0;
   padding: 0;
 }
 
 html {
-  -webkit-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; /* stop iOS enlarging text */
 }
 
 body {
@@ -106,8 +128,8 @@ body {
 }
 
 img {
-  display: block;
-  max-width: 100%;
+  display: block;      /* removes the small gap under inline images */
+  max-width: 100%;     /* images never overflow their container */
 }
 
 a {
@@ -119,7 +141,9 @@ ul {
   list-style: none;
 }
 
-/* Page wrapper: section backgrounds run full-width. */
+/* .page is a vertical flex column: the nav, main content and footer
+   stack in order. overflow-x: clip stops any oversized image from
+   creating a horizontal scrollbar. */
 .page {
   width: 100%;
   display: flex;
@@ -245,41 +269,45 @@ ul {
 }
 
 /* ============================================================
-   Hero
+   Hero — light-green band at the top of the page.
+   Layout: a flex ROW (text block on the left, image on the right).
+   The text block grows (flex: 1 1 0) so the image is pushed to the
+   far right; the image keeps its fixed size.
    ============================================================ */
 .hero {
-  padding-block: 100px;
-  padding-inline: 40px;
+  padding-block: 100px;   /* 100px top & bottom (padding-block) */
+  padding-inline: 40px;   /* 40px left & right (padding-inline) */
   background: var(--bg-1);
+  /* square top corners, 16px rounded bottom corners */
   border-radius: 0 0 var(--radius-hero) var(--radius-hero);
 }
 
 .hero__content {
   display: flex;
-  align-items: center;
-  gap: 80px;
+  align-items: center; /* vertically centre text and image */
+  gap: 80px;           /* space between the text and the image */
 }
 
 .hero__block {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* stack text group above the button */
   gap: 50px;
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 1 1 0;   /* grow to fill space -> pushes image right */
+  min-width: 0;  /* lets the block shrink below its content width */
 }
 
 .hero__text {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 24px; /* space between heading and subtitle */
 }
 
 .hero__title {
   font-family: var(--font-heading);
   font-weight: 400;
-  font-size: 80px;
-  line-height: var(--lh-h1);
-  letter-spacing: var(--ls-h1);
+  font-size: var(--fs-h1);      /* 80px on desktop */
+  line-height: var(--lh-h1);    /* 100% */
+  letter-spacing: var(--ls-h1); /* -8% */
 }
 
 .hero__subtitle {
@@ -288,13 +316,15 @@ ul {
   letter-spacing: var(--ls-body);
 }
 
+/* The button sits at the bottom-left of the text block */
 .hero .btn--dark {
   align-self: flex-start;
   font-size: var(--fs-label);
 }
 
+/* Fixed-size image box; the <img> fills it and crops (cover) */
 .hero__image {
-  flex: 0 0 auto;
+  flex: 0 0 auto; /* don't grow, don't shrink */
   width: 429px;
   height: 411.49px;
   border-radius: var(--radius-img);
@@ -303,25 +333,29 @@ ul {
 .hero__image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* fill the box, crop the overflow */
 }
 
 /* ============================================================
    Services
+   Two parts:
+     1. .services__intro  — centred eyebrow + heading + button
+     2. .services__list   — three cards that alternate side
    ============================================================ */
 .services {
   background: var(--bg-2);
 }
 
+/* --- 1. Centred intro --- */
 .services__intro {
-  padding-block: 120px 100px;
+  padding-block: 120px 100px; /* different top / bottom padding */
   padding-inline: 40px;
 }
 
 .services__intro-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center;    /* centre children horizontally */
   justify-content: center;
   text-align: center;
   gap: 28.04px;
@@ -341,7 +375,7 @@ ul {
   line-height: var(--lh-105);
   letter-spacing: var(--ls-h2);
   text-align: center;
-  max-width: 857.44px;
+  max-width: 857.44px; /* keeps the heading to two tidy lines */
 }
 
 .services__lead {
@@ -349,34 +383,38 @@ ul {
   text-align: center;
 }
 
+/* --- 2. Alternating cards --- */
 .services__list {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* cards stack vertically */
 }
 
+/* Each row holds one card. "left" pushes the card to the left,
+   "right" pushes it to the right — giving the zig-zag look. */
 .services__row {
   display: flex;
   padding-block: 20px;
   padding-inline: 40px;
 }
 .services__row--left {
-  justify-content: flex-start;
+  justify-content: flex-start; /* card sits left */
 }
 .services__row--right {
-  justify-content: flex-end;
+  justify-content: flex-end; /* card sits right */
 }
 
-/* Service card */
+/* The pale-green rounded card itself */
 .card--service {
   display: flex;
   align-items: center;
-  gap: 70px;
-  width: 1036px;
-  max-width: 100%;
+  gap: 70px;          /* space between image and text */
+  width: 1036px;      /* fixed card width on desktop */
+  max-width: 100%;    /* never wider than the screen */
   background: var(--accent-1);
   border-radius: var(--radius-card);
 }
 
+/* Different padding so the text stays aligned to the card edge */
 .services__row--left .card--service {
   padding: 80px 100px 80px 80px;
 }
@@ -384,6 +422,7 @@ ul {
   padding: 80px;
 }
 
+/* Image half of the card — grows to fill the leftover space */
 .card__image {
   flex: 1 1 auto;
   min-width: 0;
@@ -400,6 +439,8 @@ ul {
   object-fit: cover;
 }
 
+/* Text half of the card — fixed width so headings wrap the same
+   way as the design (this is what breaks "Filing" onto line 2). */
 .card__content {
   flex: 0 0 393px;
   display: flex;
@@ -410,7 +451,7 @@ ul {
 .card__text {
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 40px; /* heading -> paragraph */
 }
 
 .card__title {
@@ -427,12 +468,14 @@ ul {
   letter-spacing: var(--ls-body);
 }
 
+/* The row of little chips at the bottom of a card */
 .card__labels {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* wrap to a new line if they don't fit */
   gap: 10px;
 }
 
+/* One chip, e.g. "1099 taxes". Turns pale green on hover. */
 .label {
   display: inline-flex;
   align-items: center;
@@ -453,7 +496,17 @@ ul {
 }
 
 /* ============================================================
-   Testimonial
+   Testimonial — heading + a carousel built with CSS only.
+   ------------------------------------------------------------
+   The carousel idea:
+     * Three hidden radio inputs sit at the top of .testimonial__quotes.
+     * Each card is a <label for="..."> pointing at one radio, so
+       clicking a card checks that radio.
+     * In CSS, "#testimonial-N:checked ~ ..." reacts to the checked
+       radio: it paints the matching card green and shows the
+       matching quote. The "~" (general sibling) lets us reach both
+       the cards and the quotes from the radio.
+   No JavaScript is involved.
    ============================================================ */
 .testimonial {
   padding-block: 100px;
@@ -465,9 +518,9 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 120px;
+  gap: 120px;             /* heading -> carousel */
   max-width: 1080px;
-  margin-inline: auto;
+  margin-inline: auto;    /* centre the column on the page */
 }
 
 .testimonial__heading {
@@ -480,19 +533,23 @@ ul {
   width: 100%;
 }
 
+/* Row that holds: [hidden radios] [card list] [quote list] */
 .testimonial__quotes {
   display: flex;
   gap: 100px;
   width: 100%;
 }
 
+/* Left column: the stacked, clickable cards */
 .testimonial__titles {
-  flex: 0 0 310px;
+  flex: 0 0 310px; /* fixed 310px wide, don't grow */
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
+/* One clickable card. It is a <label>, so clicking checks its radio.
+   "transparent" by default; the checked one turns dark green below. */
 .testimonial__title {
   width: 310px;
   border-radius: var(--radius-label);
@@ -505,8 +562,63 @@ ul {
   color: inherit;
   transition: background-color var(--t-base);
 }
-.testimonial__title--active {
+/* ---- Pure-CSS carousel ----
+   Three radio inputs (hidden) control the whole block:
+   - #testimonial-1/2/3 :checked  ->  highlights the matching card
+     and reveals the matching quote.
+   The general sibling selector (~) reaches both the card list and
+   the quote list, so no JavaScript is needed. */
+.testimonial__radio {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* Active (green) card */
+#testimonial-1:checked ~ .testimonial__titles .testimonial__title:nth-child(1),
+#testimonial-2:checked ~ .testimonial__titles .testimonial__title:nth-child(2),
+#testimonial-3:checked ~ .testimonial__titles .testimonial__title:nth-child(3) {
   background: var(--bg-3);
+}
+/* Active card text colours */
+#testimonial-1:checked ~ .testimonial__titles .testimonial__title:nth-child(1) .testimonial__role,
+#testimonial-2:checked ~ .testimonial__titles .testimonial__title:nth-child(2) .testimonial__role,
+#testimonial-3:checked ~ .testimonial__titles .testimonial__title:nth-child(3) .testimonial__role {
+  color: var(--text-on-accent-1);
+}
+#testimonial-1:checked ~ .testimonial__titles .testimonial__title:nth-child(1) .testimonial__place,
+#testimonial-2:checked ~ .testimonial__titles .testimonial__title:nth-child(2) .testimonial__place,
+#testimonial-3:checked ~ .testimonial__titles .testimonial__title:nth-child(3) .testimonial__place {
+  color: var(--text-on-accent-4);
+}
+/* Active card divider is the light green line */
+#testimonial-1:checked ~ .testimonial__titles .testimonial__title:nth-child(1) .testimonial__title-text::before,
+#testimonial-2:checked ~ .testimonial__titles .testimonial__title:nth-child(2) .testimonial__title-text::before,
+#testimonial-3:checked ~ .testimonial__titles .testimonial__title:nth-child(3) .testimonial__title-text::before {
+  background: #7d9276;
+}
+
+/* Only the quote matching the checked radio is shown */
+.testimonial__quote {
+  display: none;
+}
+#testimonial-1:checked ~ .testimonial__quotes-list .testimonial__quote[data-quote="1"],
+#testimonial-2:checked ~ .testimonial__quotes-list .testimonial__quote[data-quote="2"],
+#testimonial-3:checked ~ .testimonial__quotes-list .testimonial__quote[data-quote="3"] {
+  display: flex;
+}
+
+/* Keyboard focus ring for accessibility */
+.testimonial__radio:focus-visible ~ .testimonial__titles .testimonial__title {
+  outline: 2px solid var(--bg-3);
+  outline-offset: 2px;
+}
+
+.testimonial__quotes-list {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .testimonial__title-text {
@@ -526,10 +638,6 @@ ul {
   height: 1px;
   background: var(--divider-1);
 }
-/* 1st (active/green) card: very light green divider */
-.testimonial__title--active .testimonial__title-text::before {
-  background: #7d9276;
-}
 
 .testimonial__role {
   font-family: var(--font-heading);
@@ -538,9 +646,6 @@ ul {
   line-height: var(--lh-105);
   letter-spacing: var(--ls-body);
   color: var(--text-on-accent-2);
-}
-.testimonial__title--active .testimonial__role {
-  color: var(--text-on-accent-1);
 }
 
 .testimonial__place {
@@ -551,14 +656,10 @@ ul {
   letter-spacing: var(--ls-body);
   color: var(--text-on-accent-2);
 }
-.testimonial__title--active .testimonial__place {
-  color: var(--text-on-accent-4);
-}
 
 .testimonial__quote {
   flex: 1 1 auto;
   min-width: 0;
-  display: flex;
   flex-direction: column;
   gap: 50px;
   padding: 0 30px 0 40px;
@@ -593,7 +694,8 @@ ul {
 }
 
 /* ============================================================
-   Image break
+   Image break — a full-width photo band.
+   The <img> fills the band and crops to fit (object-fit: cover).
    ============================================================ */
 .image-break {
   height: 600px;
@@ -606,7 +708,11 @@ ul {
 }
 
 /* ============================================================
-   Benefits
+   Benefits — two-part section:
+     * header: heading (left) + intro paragraph (right)
+     * columns: three call-out columns with an icon, title,
+       label and body. On desktop they sit side by side; on
+       tablet/mobile they stack and their dividers rotate.
    ============================================================ */
 .benefits {
   padding-block: 100px;
@@ -617,11 +723,12 @@ ul {
 .benefits__content {
   display: flex;
   flex-direction: column;
-  gap: 160px;
+  gap: 160px;           /* header -> columns */
   max-width: 1200px;
   margin-inline: auto;
 }
 
+/* Header: two side-by-side blocks pinned to the top */
 .benefits__header {
   display: flex;
   align-items: flex-start;
@@ -634,7 +741,7 @@ ul {
   font-size: var(--fs-h2);
   line-height: var(--lh-105);
   letter-spacing: var(--ls-h2);
-  flex: 0 0 575px;
+  flex: 0 0 575px; /* fixed width so it wraps like the design */
 }
 
 .benefits__intro {
@@ -651,19 +758,19 @@ ul {
   min-height: 330px;
 }
 
+/* One call-out column. The left border is the divider between
+   columns (it becomes a top border when they stack on small screens). */
 .benefits__col {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 30px;                 /* icon -> title -> label -> body */
   padding: 20px 80px 20px 50px;
-  flex: 1 1 0;
+  flex: 1 1 0;               /* three columns share the width equally */
+  border-left: 1px solid var(--divider-1);
 }
+/* The middle column has no right padding in the design */
 .benefits__col--narrow {
   padding: 20px 0 20px 50px;
-}
-/* Divider line on the left of every column */
-.benefits__col {
-  border-left: 1px solid var(--divider-1);
 }
 
 .benefits__icon {
@@ -693,11 +800,12 @@ ul {
 }
 
 /* ============================================================
-   CTA
+   CTA — dark green card (title, text, button) beside a photo.
+   Row on desktop; stacked on mobile with the photo on top.
    ============================================================ */
 .cta {
   display: flex;
-  align-items: stretch;
+  align-items: stretch; /* card and photo share the same height */
   gap: 20px;
   padding-block: 50px;
   padding-inline: 40px;
@@ -705,6 +813,7 @@ ul {
   background: var(--bg-4);
 }
 
+/* The dark card — slightly wider than the photo (55% vs 45%) */
 .cta__card {
   flex: 1 1 55%;
   display: flex;
@@ -756,7 +865,8 @@ ul {
 }
 
 /* ============================================================
-   Experts
+   Experts — closing call to action: big centred heading + one
+   large pill button. #book is the anchor for the nav/footer links.
    ============================================================ */
 .experts {
   padding-block: 160px;
@@ -782,7 +892,11 @@ ul {
 }
 
 /* ============================================================
-   Footer
+   Footer — dark green band.
+   Desktop/tablet: two columns (left = logo + tagline,
+   right = Services label + button + copyright).
+   Mobile: the four parts are re-ordered with "order" so the
+   buttons sit right under the logo.
    ============================================================ */
 .footer {
   display: flex;
@@ -795,12 +909,14 @@ ul {
   color: var(--text-on-accent-1);
 }
 
+/* Left column: logo pushed to the top, tagline to the bottom
+   (justify-content: space-between on a column does that). */
 .footer__left {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 236px;
-  flex: 1 1 50%;
+  flex: 1 1 50%; /* half the footer width */
 }
 
 .footer__logo img {
@@ -816,11 +932,14 @@ ul {
   letter-spacing: var(--ls-body);
   color: var(--text-on-accent-4);
 }
+/* The first line of the tagline is white (via <strong>) */
 .footer__tagline strong {
   font-weight: 500;
   color: var(--text-on-accent-1);
 }
 
+/* Right column: "Services" + button at the top, copyright at the
+   bottom. */
 .footer__right {
   display: flex;
   flex-direction: column;
@@ -830,6 +949,7 @@ ul {
   flex: 1 1 50%;
 }
 
+/* Holds the "Services" label and the button on one line */
 .footer__content {
   display: flex;
   align-items: center;
@@ -862,8 +982,16 @@ ul {
 }
 
 /* ============================================================
-   Responsive — Tablet (Figma: 800–1279px)
+   RESPONSIVE
+   ------------------------------------------------------------
+   Two media queries adjust the layout for smaller screens.
+   "max-width: 1279px"  = tablet and below
+   "max-width: 799px"   = mobile
+   Media queries apply only when the screen is at most that wide,
+   so the desktop styles above act as the base.
    ============================================================ */
+
+/* ---- Tablet (≤ 1279px) ---- */
 @media (max-width: 1279px) {
   .nav {
     height: 85px;
@@ -882,7 +1010,7 @@ ul {
     gap: 32px;
   }
   .hero__title {
-    font-size: 58px;
+    font-size: var(--fs-h1-sm);
     letter-spacing: -0.08em;
   }
   .hero__image {
@@ -895,7 +1023,7 @@ ul {
     padding: 120px 24px 100px;
   }
   .services__heading {
-    font-size: 48px;
+    font-size: var(--fs-h2-sm);
     letter-spacing: -0.07em;
   }
 
@@ -921,7 +1049,7 @@ ul {
     order: -1;
   }
   .card__title {
-    font-size: 34px;
+    font-size: var(--fs-h3-sm);
     letter-spacing: -0.045em;
   }
   .card__content {
@@ -939,14 +1067,14 @@ ul {
     padding: 100px;
   }
   .testimonial__heading {
-    font-size: 48px;
+    font-size: var(--fs-h2-sm);
     letter-spacing: -0.07em;
   }
   .testimonial__quotes {
     gap: 28px;
   }
   .testimonial__text {
-    font-size: 24px;
+    font-size: var(--fs-quote-sm);
     letter-spacing: -0.045em;
   }
 
@@ -966,11 +1094,11 @@ ul {
     flex: 1 1 0;
   }
   .benefits__heading {
-    font-size: 48px;
+    font-size: var(--fs-h2-sm);
     letter-spacing: -0.07em;
   }
   .benefits__title {
-    font-size: 26px;
+    font-size: var(--fs-h4-sm);
     letter-spacing: -0.045em;
   }
   .benefits__columns {
@@ -992,7 +1120,7 @@ ul {
     padding: 160px 80px;
   }
   .experts__heading {
-    font-size: 48px;
+    font-size: var(--fs-h2-sm);
     letter-spacing: -0.07em;
   }
 
@@ -1010,9 +1138,7 @@ ul {
   }
 }
 
-/* ============================================================
-   Responsive — Mobile (Figma: < 800px)
-   ============================================================ */
+/* ---- Mobile (≤ 799px) ---- */
 @media (max-width: 799px) {
   .nav {
     height: 69px;
@@ -1046,7 +1172,7 @@ ul {
     gap: 16px;
   }
   .hero__title {
-    font-size: 40px;
+    font-size: var(--fs-h1-xs);
     letter-spacing: -0.08em;
     white-space: normal;
   }
@@ -1055,7 +1181,7 @@ ul {
     padding: 120px 16px 100px;
   }
   .services__heading {
-    font-size: 32px;
+    font-size: var(--fs-h2-xs);
     letter-spacing: -0.07em;
   }
   .services__row,
@@ -1074,7 +1200,7 @@ ul {
     order: -1;
   }
   .card__title {
-    font-size: 28px;
+    font-size: var(--fs-h3-xs);
     letter-spacing: -0.045em;
   }
   .card__image,
@@ -1093,7 +1219,7 @@ ul {
     padding: 36px;
   }
   .testimonial__heading {
-    font-size: 32px;
+    font-size: var(--fs-h2-xs);
     letter-spacing: -0.07em;
     text-align: left;
   }
@@ -1129,7 +1255,7 @@ ul {
     padding-block: 7px 0;
   }
   .testimonial__text {
-    font-size: 18px;
+    font-size: var(--fs-quote-xs);
     letter-spacing: -0.045em;
   }
 
@@ -1155,11 +1281,11 @@ ul {
     width: 100%;
   }
   .benefits__heading {
-    font-size: 32px;
+    font-size: var(--fs-h2-xs);
     letter-spacing: -0.07em;
   }
   .benefits__title {
-    font-size: 22px;
+    font-size: var(--fs-h4-xs);
     letter-spacing: -0.045em;
   }
   .benefits__columns {
@@ -1189,7 +1315,7 @@ ul {
     height: 232px;
   }
   .cta__title {
-    font-size: 28px;
+    font-size: var(--fs-h3-xs);
     letter-spacing: -0.045em;
   }
 
@@ -1197,7 +1323,7 @@ ul {
     padding: 160px 24px;
   }
   .experts__heading {
-    font-size: 32px;
+    font-size: var(--fs-h2-xs);
     letter-spacing: -0.07em;
   }
 
@@ -1230,14 +1356,13 @@ ul {
   }
 }
 
-/* ============================================================
-   Reduced motion
-   ============================================================ */
+/* ---- Accessibility: honour "reduce motion" ----
+   Users who ask their OS to minimise animation get instant state
+   changes instead of transitions. */
 @media (prefers-reduced-motion: reduce) {
-  .btn {
-    transition: none;
-  }
-  .nav__link {
+  .btn,
+  .nav__link,
+  .label {
     transition: none;
   }
 }

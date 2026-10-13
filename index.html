@@ -1,20 +1,35 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     Noble Finance — one-page landing site.
+     Pure HTML + CSS (no JavaScript, no build step).
+     Open index.html directly, or host the folder anywhere.
+     ============================================================ -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- Lets the page scale correctly on phones/tablets -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noble Finance — Financial Clarity You Can Trust</title>
+
+  <!-- Google Fonts: Work Sans (headings/body) + DM Sans (large button) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@200;400;500;600&family=DM+Sans:wght@500&display=swap"
     rel="stylesheet"
   />
+
+  <!-- All styling lives in this one file -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- .page is a flex column so the footer can be re-ordered on
+       smaller screens if needed, and clips horizontal overflow. -->
   <div class="page">
-    <!-- ============ NAV ============ -->
+    <!-- ========================================================
+         NAV — logo on the left, "Services" link + dark pill button
+         on the right. Sticky-free; scrolls away with the page.
+         ======================================================== -->
     <header class="nav">
       <a class="nav__logo" href="#" aria-label="Noble Finances — home">
         <img src="assets/logo.svg" alt="Noble Finances" width="133" height="16" />
@@ -26,7 +41,11 @@
     </header>
 
     <main>
-      <!-- ============ HERO ============ -->
+      <!-- ======================================================
+           HERO — light-green block. Left: headline, subtitle and
+           a CTA button. Right: the "globe" image.
+           A flex row that becomes a column on mobile.
+           ====================================================== -->
       <section class="hero">
         <div class="hero__content">
           <div class="hero__block">
@@ -42,8 +61,13 @@
         </div>
       </section>
 
-      <!-- ============ SERVICES ============ -->
+      <!-- ======================================================
+           SERVICES — a centred intro block followed by three
+           alternating cards (image left / image right / image left).
+           Each card also has three "label" chips.
+           ====================================================== -->
       <section class="services" id="services">
+        <!-- Centred intro: eyebrow, big heading, lead line, button -->
         <div class="services__intro">
           <div class="services__intro-content">
             <p class="services__eyebrow">Services</p>
@@ -53,6 +77,7 @@
           </div>
         </div>
 
+        <!-- Card 1: image on the LEFT -->
         <div class="services__list">
           <article class="services__row services__row--left">
             <div class="card card--service">
@@ -73,6 +98,7 @@
             </div>
           </article>
 
+          <!-- Card 2: image on the RIGHT -->
           <article class="services__row services__row--right">
             <div class="card card--service">
               <div class="card__content">
@@ -92,6 +118,7 @@
             </div>
           </article>
 
+          <!-- Card 3: image on the LEFT again -->
           <article class="services__row services__row--left">
             <div class="card card--service">
               <div class="card__image card__image--3">
@@ -113,48 +140,89 @@
         </div>
       </section>
 
-      <!-- ============ TESTIMONIAL ============ -->
+      <!-- ======================================================
+           TESTIMONIAL — heading + a PURE-CSS carousel.
+           How it works (no JavaScript):
+             1. Three hidden <input type="radio"> at the top.
+             2. Each <label for="..."> acts as the clickable card.
+             3. #testimonial-N:checked in styles.css highlights the
+                matching card and shows the matching quote.
+           ====================================================== -->
       <section class="testimonial">
         <div class="testimonial__inner">
           <h2 class="testimonial__heading">Hear From Our Happy Clients</h2>
+
           <div class="testimonial__quotes">
-            <div class="testimonial__titles" role="tablist" aria-label="Client testimonials">
-              <button class="testimonial__title testimonial__title--active" type="button" role="tab" aria-selected="true" data-index="0">
+            <!-- The three radios that drive the carousel.
+                 "checked" on the first = default open state. -->
+            <input class="testimonial__radio" type="radio" name="testimonial" id="testimonial-1" checked />
+            <input class="testimonial__radio" type="radio" name="testimonial" id="testimonial-2" />
+            <input class="testimonial__radio" type="radio" name="testimonial" id="testimonial-3" />
+
+            <!-- Clickable cards (one per radio) -->
+            <div class="testimonial__titles">
+              <label class="testimonial__title" for="testimonial-1">
                 <span class="testimonial__title-text">
                   <span class="testimonial__role">Graphic Designer</span>
                   <span class="testimonial__place">Ontario, Canada</span>
                 </span>
-              </button>
-              <button class="testimonial__title" type="button" role="tab" aria-selected="false" data-index="1">
+              </label>
+              <label class="testimonial__title" for="testimonial-2">
                 <span class="testimonial__title-text">
                   <span class="testimonial__role">Commercial Photographer</span>
                   <span class="testimonial__place">Ontario, Canada</span>
                 </span>
-              </button>
-              <button class="testimonial__title" type="button" role="tab" aria-selected="false" data-index="2">
+              </label>
+              <label class="testimonial__title" for="testimonial-3">
                 <span class="testimonial__title-text">
                   <span class="testimonial__role">Stylist</span>
                   <span class="testimonial__place">Austin Texas</span>
                 </span>
-              </button>
+              </label>
             </div>
-            <blockquote class="testimonial__quote">
-              <p class="testimonial__text" data-quote>&ldquo;Managing my taxes as a freelancer used to be overwhelming, but Noble Finance made it effortless.&rdquo;</p>
-              <footer class="testimonial__byline">
-                <img class="testimonial__avatar" src="assets/testimonial-1-avatar.png" alt="" width="46" height="48" />
-                <span class="testimonial__author" data-author>Taylor M., 28 years old</span>
-              </footer>
-            </blockquote>
+
+            <!-- The three quotes; CSS shows only the one whose
+                 data-quote number matches the checked radio. -->
+            <div class="testimonial__quotes-list">
+              <blockquote class="testimonial__quote" data-quote="1">
+                <p class="testimonial__text">&ldquo;Managing my taxes as a freelancer used to be overwhelming, but Noble Finance made it effortless.&rdquo;</p>
+                <footer class="testimonial__byline">
+                  <img class="testimonial__avatar" src="assets/testimonial-1-avatar.png" alt="" width="46" height="48" />
+                  <span class="testimonial__author">Taylor M., 28 years old</span>
+                </footer>
+              </blockquote>
+              <blockquote class="testimonial__quote" data-quote="2">
+                <p class="testimonial__text">&ldquo;From invoicing to tax prep, Noble Finance has been a game-changer for my freelance business.&rdquo;</p>
+                <footer class="testimonial__byline">
+                  <img class="testimonial__avatar" src="assets/testimonial-2-avatar.png" alt="" width="46" height="48" />
+                  <span class="testimonial__author">Jordan K., 34 years old</span>
+                </footer>
+              </blockquote>
+              <blockquote class="testimonial__quote" data-quote="3">
+                <p class="testimonial__text">&ldquo;I used to worry about missing deductions, but with Noble Finance, I know I&rsquo;m maximizing my savings.&rdquo;</p>
+                <footer class="testimonial__byline">
+                  <img class="testimonial__avatar" src="assets/avatar-3.png" alt="" width="46" height="48" />
+                  <span class="testimonial__author">Avery R., 31 years old</span>
+                </footer>
+              </blockquote>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ============ IMAGE BREAK ============ -->
+      <!-- ======================================================
+           IMAGE BREAK — a full-width photo band between sections.
+           ====================================================== -->
       <section class="image-break">
         <img src="assets/image-break.png" alt="Noble Finance team at work" />
       </section>
 
-      <!-- ============ BENEFITS ============ -->
+      <!-- ======================================================
+           BENEFITS — two-column header (heading | paragraph) and
+           three call-out columns, each with an icon, title, label
+           and body copy. Columns become a stacked list on smaller
+           screens (their dividers rotate from left to top).
+           ====================================================== -->
       <section class="benefits">
         <div class="benefits__content">
           <div class="benefits__header">
@@ -184,7 +252,11 @@
         </div>
       </section>
 
-      <!-- ============ CTA ============ -->
+      <!-- ======================================================
+           CTA — dark green card (title, text, "Learn More" button)
+           next to a photo. Side-by-side on desktop, stacked on
+           mobile with the photo on top.
+           ====================================================== -->
       <section class="cta">
         <div class="cta__card">
           <div class="cta__content">
@@ -198,7 +270,11 @@
         </div>
       </section>
 
-      <!-- ============ EXPERTS ============ -->
+      <!-- ======================================================
+           EXPERTS — closing call-to-action: a large centred
+           heading and one large button. (#book is the anchor the
+           nav/footer links point to.)
+           ====================================================== -->
       <section class="experts" id="book">
         <div class="experts__content">
           <h2 class="experts__heading">We believe that tax filing should be seamless, accurate, and stress-free. Get started with Noble Finance today!</h2>
@@ -207,7 +283,12 @@
       </section>
     </main>
 
-    <!-- ============ FOOTER ============ -->
+    <!-- ========================================================
+         FOOTER — dark green. Left: logo + tagline.
+         Right: "Services" label + white button, and the copyright.
+         On mobile the four parts are re-ordered so the buttons sit
+         directly under the logo (see styles.css).
+         ======================================================== -->
     <footer class="footer">
       <div class="footer__left">
         <div class="footer__logo">
@@ -224,6 +305,5 @@
       </div>
     </footer>
   </div>
-  <script defer src="main.js"></script>
 </body>
 </html>
